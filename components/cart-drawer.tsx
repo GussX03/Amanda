@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { ShoppingBag, X, Plus, Minus, Trash2 } from "lucide-react"
 import { useCart } from "./cart-context"
+import { useCopyToast } from "./copy-toast"
 
 /* ─── Trigger button — lives inside the header ─────────────────────────── */
 export function CartTrigger() {
@@ -27,13 +28,12 @@ export function CartTrigger() {
 /* ─── Drawer panel — rendered at root level, outside any fixed ancestor ── */
 export function CartDrawer() {
   const { items, removeItem, updateQuantity, totalItems, totalPrice, drawerOpen, closeDrawer } = useCart()
+  const { copyToClipboard } = useCopyToast()
 
-  const whatsappMessage = encodeURIComponent(
-    `Hola Amanda! Me interesa hacer un pedido:\n${items
-      .map((i) => `- ${i.name} x${i.quantity} = $${(i.price * i.quantity).toFixed(2)} MXN`)
-      .join("\n")}\n\nTotal: $${totalPrice.toFixed(2)} MXN`
-  )
-  const whatsappUrl = `https://wa.me/522463677293?text=${whatsappMessage}`
+  const suggestedMessage = `Hola, quiero información sobre el servicio\n\nPedido:\n${items
+    .map((i) => `- ${i.name} x${i.quantity} = $${(i.price * i.quantity).toFixed(2)} MXN`)
+    .join("\n")}\n\nTotal: $${totalPrice.toFixed(2)} MXN`
+  const instagramProfile = "https://www.instagram.com/amanda._oficial_"
 
   return (
     <>
@@ -137,16 +137,28 @@ export function CartDrawer() {
               <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Total</span>
               <span className="font-sans text-2xl">${totalPrice.toFixed(2)} MXN</span>
             </div>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-full bg-foreground text-background py-4 font-mono text-xs tracking-[0.2em] uppercase hover:bg-accent hover:text-foreground transition-colors"
-            >
-              Ordenar por WhatsApp
-            </a>
+
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={() => copyToClipboard(suggestedMessage)}
+                className="w-full inline-flex items-center justify-center gap-2 bg-background text-foreground py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-accent transition-colors"
+              >
+                Copiar mensaje
+              </button>
+
+              <a
+                href={instagramProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 border border-foreground py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-foreground hover:text-background transition-colors"
+              >
+                Abrir Instagram
+              </a>
+            </div>
+
             <p className="text-center text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
-              Te contactaremos para coordinar el pago y envío
+              Te contactaremos por Instagram para coordinar el pago y envío
             </p>
           </div>
         )}

@@ -13,7 +13,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-30 bg-background/95 backdrop-blur-sm border-b border-border">
       {/* Top announcement bar */}
       <div className="bg-foreground text-background text-center py-2 font-mono text-[10px] tracking-[0.2em] uppercase">
-        Envíos a todo México · Pago por WhatsApp o efectivo
+        Envíos a todo México · Contáctanos por Instagram
       </div>
 
       <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">

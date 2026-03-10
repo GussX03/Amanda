@@ -24,7 +24,7 @@ export function Hero() {
             Ver colección
           </Link>
           <a
-            href="https://wa.me/522463677293"
+            href="https://www.instagram.com/amanda._oficial_"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center border border-foreground px-8 py-3.5 font-mono text-xs tracking-[0.2em] uppercase hover:bg-secondary transition-colors"
