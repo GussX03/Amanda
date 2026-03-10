@@ -18,12 +18,19 @@ interface CartContextType {
   clearCart: () => void
   totalItems: number
   totalPrice: number
+  drawerOpen: boolean
+  openDrawer: () => void
+  closeDrawer: () => void
 }
 
 const CartContext = createContext<CartContextType | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const openDrawer = useCallback(() => setDrawerOpen(true), [])
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   const addItem = useCallback((product: Omit<CartItem, "quantity">) => {
     setItems((prev) => {
@@ -58,7 +65,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, drawerOpen, openDrawer, closeDrawer }}
     >
       {children}
     </CartContext.Provider>

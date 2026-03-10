@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
-import { CartDrawer } from "./cart-drawer"
+import { CartTrigger } from "./cart-drawer"
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -56,7 +56,7 @@ export function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-4">
-          <CartDrawer />
+          <CartTrigger />
         </div>
       </div>
 
