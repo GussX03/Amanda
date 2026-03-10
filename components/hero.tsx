@@ -10,8 +10,8 @@ export function Hero() {
           Joyería Artesanal
         </p>
         <h1 className="font-sans text-5xl md:text-7xl leading-none text-balance text-foreground" style={{ letterSpacing: '-0.02em' }}>
-          Piezas únicas,<br />
-          <span className="italic font-light">hechas con amor</span>
+          Tu estilo<br />
+          <span className="italic font-light">siempre gana</span>
         </h1>
         <p className="font-mono text-sm text-muted-foreground leading-relaxed max-w-xs">
           Collares, pulseras y accesorios artesanales. Cada pieza es única y elaborada a mano.
