@@ -121,9 +121,9 @@ export function Footer() {
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
           alt="AMANDA"
-          width={80}
-          height={26}
-          className="h-6 w-auto opacity-60"
+          width={140}
+          height={46}
+          className="h-10 w-auto opacity-60"
         />
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-background/40">
           © {new Date().getFullYear()} Amanda. Joyería artesanal hecha con amor.

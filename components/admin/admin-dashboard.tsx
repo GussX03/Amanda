@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import {
   Plus, Trash2, Pencil, LogOut, Search, RefreshCw, X, Upload, ImageIcon, Save,
-  SlidersHorizontal, AlertTriangle, Check,
+  SlidersHorizontal, AlertTriangle, Check, ExternalLink,
 } from "lucide-react"
+import { ThemeToggleInverted } from "@/components/theme-toggle"
 import { listProducts, deleteProduct, deletePhoto, apiRequest, fileToBase64, generateId } from "@/lib/api"
 import type { Product, PhotoUpload } from "@/lib/types"
 
@@ -277,21 +279,32 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
               alt="AMANDA"
-              width={100}
-              height={33}
-              className="h-6 sm:h-7 w-auto"
+              width={160}
+              height={53}
+              className="h-9 sm:h-10 w-auto"
             />
             <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-background/50 hidden sm:inline">
               Admin
             </span>
           </div>
-          <button
-            onClick={onLogout}
-            className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-background/60 hover:text-background transition-colors"
-          >
-            <LogOut size={14} />
-            <span className="hidden sm:inline">Salir</span>
-          </button>
+          <div className="flex items-center gap-1 sm:gap-3">
+            <Link
+              href="/"
+              target="_blank"
+              className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.2em] uppercase text-background/60 hover:text-background transition-colors px-2 py-1"
+            >
+              <ExternalLink size={13} />
+              <span className="hidden sm:inline">Ver tienda</span>
+            </Link>
+            <ThemeToggleInverted />
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-background/60 hover:text-background transition-colors"
+            >
+              <LogOut size={14} />
+              <span className="hidden sm:inline">Salir</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -558,6 +571,7 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
   const [existingPhotos, setExistingPhotos] = useState(product?.fotos ?? [])
   const [newFiles, setNewFiles] = useState<File[]>([])
   const [saving, setSaving] = useState(false)
+  const [deletingPhoto, setDeletingPhoto] = useState(false)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -571,13 +585,19 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
 
   const removeExistingPhoto = async (idFoto: string) => {
     if (!product) return
-    const res = await deletePhoto(product.id_producto, idFoto)
-    if (res.status === "success") {
-      setExistingPhotos((prev) => prev.filter((f) => f.id_foto !== idFoto))
-      showToast("Foto eliminada", "ok")
-    } else {
-      showToast(res.message || "Error al eliminar foto", "err")
+    setDeletingPhoto(true)
+    try {
+      const res = await deletePhoto(product.id_producto, idFoto)
+      if (res.status === "success") {
+        setExistingPhotos((prev) => prev.filter((f) => f.id_foto !== idFoto))
+        showToast("Foto eliminada", "ok")
+      } else {
+        showToast(res.message || "Error al eliminar foto", "err")
+      }
+    } catch {
+      showToast("Error de conexión al eliminar foto", "err")
     }
+    setDeletingPhoto(false)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -660,6 +680,7 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
   return (
     <>
       {saving && <LoadingOverlay message={isEdit ? "Actualizando producto..." : "Creando producto..."} />}
+      {deletingPhoto && <LoadingOverlay message="Eliminando foto..." />}
       <div className="fixed inset-0 z-50 flex items-start justify-center bg-foreground/40 backdrop-blur-sm overflow-y-auto py-4 sm:py-10 px-4">
         <div className="bg-card border border-border w-full max-w-2xl shadow-2xl">
           {/* Header */}
@@ -767,18 +788,21 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
           {isEdit && existingPhotos.length > 0 && (
             <div>
               <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-2">
-                Fotos actuales
+                Fotos actuales ({existingPhotos.length})
               </label>
               <div className="flex gap-3 flex-wrap">
                 {existingPhotos.map((foto) => (
-                  <div key={foto.id_foto} className="relative w-20 h-20 bg-secondary overflow-hidden group">
-                    <Image src={foto.foto} alt="" fill className="object-cover" />
+                  <div key={foto.id_foto} className="relative group">
+                    <div className="relative w-24 h-24 bg-secondary overflow-hidden border border-border">
+                      <Image src={foto.foto} alt="" fill className="object-cover" />
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeExistingPhoto(foto.id_foto)}
-                      className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                      className="absolute -top-2 -right-2 w-7 h-7 bg-destructive text-background flex items-center justify-center shadow-lg hover:bg-destructive/80 transition-colors z-10"
+                      title="Eliminar foto"
                     >
-                      <Trash2 size={16} className="text-background" />
+                      <Trash2 size={13} />
                     </button>
                   </div>
                 ))}
@@ -799,14 +823,17 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
             {newFiles.length > 0 && (
               <div className="flex gap-3 flex-wrap mt-3">
                 {newFiles.map((file, idx) => (
-                  <div key={idx} className="relative w-20 h-20 bg-secondary overflow-hidden group">
-                    <Image src={URL.createObjectURL(file)} alt="" fill className="object-cover" />
+                  <div key={idx} className="relative group">
+                    <div className="relative w-24 h-24 bg-secondary overflow-hidden border border-border">
+                      <Image src={URL.createObjectURL(file)} alt="" fill className="object-cover" />
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeNewFile(idx)}
-                      className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                      className="absolute -top-2 -right-2 w-7 h-7 bg-destructive text-background flex items-center justify-center shadow-lg hover:bg-destructive/80 transition-colors z-10"
+                      title="Quitar foto"
                     >
-                      <X size={16} className="text-background" />
+                      <Trash2 size={13} />
                     </button>
                   </div>
                 ))}

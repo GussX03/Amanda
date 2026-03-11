@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { CartTrigger } from "./cart-drawer"
+import { ThemeToggle } from "./theme-toggle"
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -47,15 +48,16 @@ export function Header() {
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
             alt="AMANDA"
-            width={120}
-            height={40}
-            className="h-8 w-auto object-contain"
+            width={180}
+            height={60}
+            className="h-12 w-auto object-contain"
             priority
           />
         </Link>
 
         {/* Right actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           <CartTrigger />
         </div>
       </div>
