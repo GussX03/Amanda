@@ -74,7 +74,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
           {/* Heading */}
           <div className="mb-8">
             <h1 className="font-sans text-3xl text-foreground mb-2">
-              Bienvenida
+              Bienvenid@
             </h1>
             <p className="font-mono text-xs text-muted-foreground">
               Ingresa tus credenciales para acceder al panel
