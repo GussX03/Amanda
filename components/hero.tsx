@@ -42,7 +42,7 @@ export function Hero() {
         </div>
 
         {/* Right — product showcase grid */}
-        <div className="md:w-1/2 grid grid-cols-1 grid-rows-2 gap-px bg-border min-h-[80vw] md:min-h-0">
+        <div className="md:w-1/2 grid grid-cols-2 md:grid-cols-1 md:grid-rows-2 gap-px bg-border min-h-[50vw] md:min-h-0">
           <div
             className="relative overflow-hidden bg-secondary group cursor-pointer"
             onClick={() => setSelectedImage("/hero-1.jpeg")}
@@ -52,7 +52,7 @@ export function Hero() {
               alt="Joyería Amanda - Colección principal"
               fill
               className="object-contain group-hover:scale-105 transition-transform duration-700"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 768px) 50vw, 50vw"
             />
           </div>
           <div
