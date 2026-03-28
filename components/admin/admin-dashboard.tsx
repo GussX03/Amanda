@@ -8,7 +8,7 @@ import {
   SlidersHorizontal, AlertTriangle, Check, ExternalLink,
 } from "lucide-react"
 import { ThemeToggleInverted } from "@/components/theme-toggle"
-import { listProducts, deleteProduct, deletePhoto, apiRequest, fileToBase64, generateId } from "@/lib/api"
+import { listProducts, deleteProduct, deletePhoto, apiRequest, fileToBase64, optimizeImage, generateId } from "@/lib/api"
 import type { Product, PhotoUpload } from "@/lib/types"
 
 interface AdminDashboardProps {
@@ -614,7 +614,7 @@ function ProductForm({ product, allTypes, allCategories, onClose, onSaved, showT
         newFiles.map(async (file) => ({
           id_foto: generateId("FOTO"),
           fileName: file.name,
-          base64Data: await fileToBase64(file),
+          base64Data: await optimizeImage(file),
         }))
       )
 
