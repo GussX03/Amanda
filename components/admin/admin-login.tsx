@@ -165,7 +165,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
 
         {/* Footer */}
         <p className="absolute bottom-6 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground/40">
-          © {new Date().getFullYear()} Amanda · Joyería artesanal
+          © {new Date().getFullYear()} Amanda · Joyería
         </p>
       </div>
     </div>
