@@ -327,23 +327,24 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
           </p>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {newFiles.map((item) => (
-              <article key={item.id} className="border border-border bg-background p-4">
-                <div
-                  className="relative mx-auto w-full max-w-[240px] overflow-hidden bg-secondary sm:max-w-[260px]"
-                  style={ratioStyle}
-                >
-                  <Image
-                    src={item.previewUrl}
-                    alt={item.file.name}
-                    fill
-                    className="object-cover"
-                    style={{ objectPosition: `${item.position_x}% ${item.position_y}%` }}
-                  />
-                </div>
+              <article key={item.id} className="border border-border bg-background p-3 sm:p-4">
+                <div className="grid grid-cols-[116px_minmax(0,1fr)] items-start gap-3 sm:block">
+                  <div
+                    className="relative w-[116px] overflow-hidden bg-secondary sm:mx-auto sm:w-full sm:max-w-[260px]"
+                    style={ratioStyle}
+                  >
+                    <Image
+                      src={item.previewUrl}
+                      alt={item.file.name}
+                      fill
+                      className="object-cover"
+                      style={{ objectPosition: `${item.position_x}% ${item.position_y}%` }}
+                    />
+                  </div>
 
-                <div className="space-y-4 pt-4">
+                  <div className="min-w-0 space-y-3 sm:pt-4">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                    <p className="min-w-0 truncate font-mono text-[9px] tracking-[0.14em] uppercase text-muted-foreground sm:text-[10px] sm:tracking-[0.16em]">
                       {item.file.name}
                     </p>
                     <button
@@ -356,7 +357,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                     </button>
                   </div>
 
-                  <div className="space-y-3">
+                    <div className="space-y-3">
                     <div>
                       <label className="mb-2 block font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
                         Encuadre horizontal
@@ -384,6 +385,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                       />
                     </div>
                   </div>
+                  </div>
                 </div>
               </article>
             ))}
@@ -406,26 +408,27 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {photos.map((photo) => (
-              <article key={photo.id_foto} className="border border-border bg-background p-4">
-                <div
-                  className="relative mx-auto w-full max-w-[240px] overflow-hidden bg-secondary sm:max-w-[260px]"
-                  style={ratioStyle}
-                >
-                  <Image
-                    src={photo.foto}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    style={{ objectPosition: `${photo.position_x}% ${photo.position_y}%` }}
-                  />
-                  <div className="absolute left-3 top-3 bg-background/92 px-2 py-1 font-mono text-[9px] tracking-[0.18em] uppercase text-foreground">
-                    Orden {photo.orden}
+              <article key={photo.id_foto} className="border border-border bg-background p-3 sm:p-4">
+                <div className="grid grid-cols-[116px_minmax(0,1fr)] items-start gap-3 sm:block">
+                  <div
+                    className="relative w-[116px] overflow-hidden bg-secondary sm:mx-auto sm:w-full sm:max-w-[260px]"
+                    style={ratioStyle}
+                  >
+                    <Image
+                      src={photo.foto}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      style={{ objectPosition: `${photo.position_x}% ${photo.position_y}%` }}
+                    />
+                    <div className="absolute left-2 top-2 bg-background/92 px-1.5 py-1 font-mono text-[8px] tracking-[0.16em] uppercase text-foreground sm:left-3 sm:top-3 sm:px-2 sm:text-[9px] sm:tracking-[0.18em]">
+                      Orden {photo.orden}
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-4 pt-4">
+                  <div className="min-w-0 space-y-3 sm:pt-4">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                    <p className="min-w-0 truncate font-mono text-[9px] tracking-[0.14em] uppercase text-muted-foreground sm:text-[10px] sm:tracking-[0.16em]">
                       {photo.id_foto}
                     </p>
                     <span className={`inline-flex items-center gap-1 font-mono text-[10px] uppercase ${
@@ -436,7 +439,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div>
                       <label className="mb-2 block font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
                         Orden
@@ -465,7 +468,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                    <div className="space-y-3">
                     <div>
                       <label className="mb-2 block font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
                         Encuadre horizontal
@@ -494,7 +497,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
                     <button
                       type="button"
                       onClick={() => handleSavePhoto(photo)}
@@ -513,6 +516,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                       {deletingId === photo.id_foto ? <RefreshCw size={13} className="animate-spin" /> : <Trash2 size={13} />}
                       Eliminar
                     </button>
+                  </div>
                   </div>
                 </div>
               </article>
