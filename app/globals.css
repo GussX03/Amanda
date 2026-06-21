@@ -4,15 +4,15 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* AMANDA Brand — cream off-white base, deep black, gold accent, soft warm gray */
-  --background: oklch(0.985 0.004 80);       /* warm cream */
+  /* AMANDA Brand — pure white base, deep black, gold accent, soft warm gray */
+  --background: oklch(1 0 0);                /* pure white */
   --foreground: oklch(0.1 0 0);              /* near black */
   --card: oklch(1 0 0);                      /* pure white */
   --card-foreground: oklch(0.1 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.1 0 0);
   --primary: oklch(0.1 0 0);                 /* deep black */
-  --primary-foreground: oklch(0.985 0.004 80);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.94 0.006 80);         /* warm light gray */
   --secondary-foreground: oklch(0.1 0 0);
   --muted: oklch(0.94 0.006 80);
@@ -30,17 +30,17 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0rem;                            /* sharp corners for luxury look */
-  --sidebar: oklch(0.985 0.004 80);
+  --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.1 0 0);
   --sidebar-primary: oklch(0.1 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0.004 80);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.94 0.006 80);
   --sidebar-accent-foreground: oklch(0.1 0 0);
   --sidebar-border: oklch(0.88 0.005 80);
   --sidebar-ring: oklch(0.72 0.09 82);
   /* Custom brand tokens */
   --gold: oklch(0.72 0.09 82);
-  --cream: oklch(0.985 0.004 80);
+  --cream: oklch(1 0 0);
   --warm-gray: oklch(0.94 0.006 80);
 }
 

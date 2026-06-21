@@ -1,11 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { Plus, Check, Search, X, SlidersHorizontal, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react"
+import { Plus, Check, Search, X, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { useCart } from "./cart-context"
 import { useCopyToast } from "./copy-toast"
-import { listProducts } from "@/lib/api"
+import { getProductsCache, listProducts, setProductsCache } from "@/lib/api"
 import type { Product } from "@/lib/types"
 
 /* ─── Lightbox / Image Modal ─────────────────────────────────────────── */
@@ -221,10 +221,10 @@ function ProductCard({
 	}
 
 	return (
-		<article className="group flex flex-col bg-card">
+		<article className="group flex h-full flex-col">
 			{/* Image — clickable to open lightbox */}
 			<div
-				className="relative aspect-square overflow-hidden bg-secondary cursor-pointer"
+				className="relative aspect-[0.98] cursor-pointer overflow-hidden rounded-[1.35rem] bg-white"
 				onClick={() => onOpenLightbox(product)}
 				role="button"
 				tabIndex={0}
@@ -235,64 +235,67 @@ function ProductCard({
 					src={mainImage}
 					alt={product.nombre}
 					fill
-					className="object-cover group-hover:scale-105 transition-transform duration-700"
-					sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+					className="object-contain p-5 transition-transform duration-500 group-hover:scale-[1.02] sm:p-6"
+					sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
 				/>
-				<div className="absolute top-3 left-3 flex gap-1.5">
-					<span className="bg-background/90 backdrop-blur-sm font-mono text-[10px] tracking-[0.15em] uppercase px-2 py-1">
-						{product.tipo_de_producto}
-					</span>
-					{product.descuento_por_promocion && (
-						<span className="bg-accent/90 backdrop-blur-sm text-foreground font-mono text-[10px] tracking-[0.15em] uppercase px-2 py-1">
+				<div className="absolute inset-x-0 top-0 flex justify-between p-3 sm:p-4">
+					{product.descuento_por_promocion ? (
+						<span className="rounded-full bg-foreground px-2.5 py-1 font-mono text-[9px] tracking-[0.14em] uppercase text-background sm:text-[10px]">
 							-{product.porcentaje_de_promocion}%
+						</span>
+					) : (
+						<span />
+					)}
+					{photoCount > 1 && (
+						<span className="rounded-full border border-border bg-white/96 px-2.5 py-1 font-mono text-[9px] tracking-[0.12em] uppercase text-muted-foreground sm:text-[10px]">
+							+{photoCount - 1} foto
 						</span>
 					)}
 				</div>
-				{/* Photo count + zoom indicator */}
-				{photoCount > 0 && (
-					<div className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-background/90 backdrop-blur-sm px-2.5 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-						<ZoomIn size={12} className="text-muted-foreground" />
-						<span className="font-mono text-[10px] tracking-wider text-muted-foreground">
-							{photoCount} foto{photoCount !== 1 ? "s" : ""}
-						</span>
-					</div>
-				)}
 			</div>
 
 			{/* Info */}
-			<div className="flex flex-col flex-1 p-4 gap-3">
-				<div className="flex-1">
-					<p className="font-mono text-[10px] text-muted-foreground tracking-wider uppercase mb-1">
-						{product.categoria}
-					</p>
-					<h3 className="font-sans text-lg leading-snug text-balance">
+			<div className="flex flex-1 flex-col gap-2 px-1 pb-1 pt-3 sm:pt-4">
+				<div className="flex items-start justify-between gap-3">
+					<h3 className="flex-1 font-mono text-[12px] leading-[1.25] tracking-[0.08em] uppercase text-foreground sm:text-[14px]">
 						{product.nombre}
 					</h3>
-					<p className="font-mono text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-2">
-						{product.descripcion}
-					</p>
-				</div>
-
-				<div className="flex items-center justify-between">
-					<div className="flex items-baseline gap-2">
-						<p className="font-sans text-xl">
-							${finalPrice.toFixed(2)}{" "}
-							<span className="font-mono text-xs text-muted-foreground">
-								MXN
-							</span>
-						</p>
-						{product.descuento_por_promocion && (
-							<p className="font-mono text-xs text-muted-foreground line-through">
-								${product.precio.toFixed(2)}
-							</p>
-						)}
-					</div>
 					<button
 						onClick={handleAdd}
-						className={`flex items-center gap-1.5 px-4 py-2 font-mono text-[10px] tracking-[0.15em] uppercase transition-colors ${
+						className={`mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border transition-colors ${
 							added
-								? "bg-accent text-foreground"
-								: "bg-foreground text-background hover:bg-accent hover:text-foreground"
+								? "border-accent bg-accent text-foreground"
+								: "border-border bg-white text-foreground hover:border-foreground"
+						}`}
+						aria-label={`Agregar ${product.nombre} al carrito`}
+					>
+						{added ? <Check size={15} /> : <Plus size={15} strokeWidth={1.8} />}
+					</button>
+				</div>
+
+				<div className="flex items-end justify-between gap-3">
+					<div>
+						<p className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground">
+							{product.categoria}
+						</p>
+						<div className="mt-1 flex items-baseline gap-2">
+							<p className="font-sans text-lg sm:text-xl">
+								${finalPrice.toFixed(2)}
+							</p>
+							{product.descuento_por_promocion && (
+								<p className="font-mono text-[9px] uppercase text-muted-foreground line-through">
+									${product.precio.toFixed(2)}
+								</p>
+							)}
+						</div>
+					</div>
+
+					<button
+						onClick={handleAdd}
+						className={`hidden items-center gap-1.5 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.14em] uppercase transition-colors md:flex ${
+							added
+								? "border-accent bg-accent text-foreground"
+								: "border-border bg-white text-foreground hover:border-foreground"
 						}`}
 						aria-label={`Agregar ${product.nombre} al carrito`}
 					>
@@ -335,21 +338,41 @@ export function ProductGrid() {
 
 	// Fetch products
 	useEffect(() => {
+		const applyProducts = (items: Product[]) => {
+			setProducts(items)
+			if (items.length > 0) {
+				const prices = items.map((p) => p.precio)
+				setPriceRange([0, Math.ceil(Math.max(...prices) * 1.1)])
+			} else {
+				setPriceRange([0, 10000])
+			}
+		}
+
+		const cached = getProductsCache()
+		if (cached?.status === "success" && cached.productos) {
+			applyProducts(cached.productos)
+			setLoading(false)
+		}
+
 		async function load() {
-			setLoading(true)
+			if (!cached?.productos) {
+				setLoading(true)
+			}
 			try {
 				const res = await listProducts()
 				if (res.status === "success" && res.productos) {
-					setProducts(res.productos)
-					if (res.productos.length > 0) {
-						const prices = res.productos.map((p) => p.precio)
-						setPriceRange([0, Math.ceil(Math.max(...prices) * 1.1)])
-					}
+					applyProducts(res.productos)
+					setProductsCache(res)
+					setError("")
 				} else {
-					setError(res.message || "Error al cargar productos")
+					if (!cached?.productos) {
+						setError(res.message || "Error al cargar productos")
+					}
 				}
 			} catch {
-				setError("Error de conexión. Intenta de nuevo.")
+				if (!cached?.productos) {
+					setError("Error de conexión. Intenta de nuevo.")
+				}
 			}
 			setLoading(false)
 		}
@@ -422,7 +445,7 @@ export function ProductGrid() {
 	const suggestedMessage = "Hola, quiero información sobre el servicio"
 
 	return (
-		<section id="products" className="py-20 px-6 max-w-6xl mx-auto">
+		<section id="products" className="max-w-6xl mx-auto px-4 py-16 sm:px-6 sm:py-20">
 			{/* Lightbox */}
 			{lightboxProduct && (
 				<ProductLightbox
@@ -432,13 +455,13 @@ export function ProductGrid() {
 			)}
 
 			{/* Section header */}
-			<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+			<div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-6">
 				<div>
-					<p className="font-mono text-xs tracking-[0.3em] uppercase text-accent mb-2">
+					<p className="mb-2 font-mono text-[11px] tracking-[0.28em] uppercase text-accent sm:text-xs sm:tracking-[0.3em]">
 						Colección
 					</p>
 					<h2
-						className="font-sans text-4xl md:text-5xl"
+						className="font-sans text-3xl sm:text-4xl md:text-5xl"
 						style={{ letterSpacing: "-0.02em" }}
 					>
 						Nuestros productos
@@ -446,15 +469,15 @@ export function ProductGrid() {
 				</div>
 
 				{/* Search + Filters toggle */}
-				<div className="flex items-center gap-3">
-					<div className="relative">
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+					<div className="relative flex-1 sm:flex-initial">
 						<Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
 						<input
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 							placeholder="Buscar..."
-							className="bg-background border border-border pl-9 pr-4 py-2.5 font-mono text-xs w-48 focus:outline-none focus:border-foreground transition-colors"
+							className="w-full bg-background border border-border py-3 pl-9 pr-4 font-mono text-xs focus:outline-none focus:border-foreground transition-colors sm:w-48 sm:py-2.5"
 						/>
 						{searchQuery && (
 							<button
@@ -467,7 +490,7 @@ export function ProductGrid() {
 					</div>
 					<button
 						onClick={() => setShowFilters(!showFilters)}
-						className={`flex items-center gap-2 border px-4 py-2.5 font-mono text-[10px] tracking-[0.15em] uppercase transition-colors ${
+						className={`flex min-h-11 items-center justify-center gap-2 border px-4 py-2.5 font-mono text-[10px] tracking-[0.15em] uppercase transition-colors ${
 							showFilters
 								? "bg-foreground text-background border-foreground"
 								: "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
@@ -480,12 +503,12 @@ export function ProductGrid() {
 			</div>
 
 			{/* Type pills */}
-			<div className="flex gap-2 flex-wrap mb-4">
+				<div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
 				{types.map((t) => (
 					<button
 						key={t}
 						onClick={() => setActiveType(t)}
-						className={`font-mono text-[10px] tracking-[0.2em] uppercase px-4 py-2 border transition-colors ${
+						className={`shrink-0 border px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
 							activeType === t
 								? "bg-foreground text-background border-foreground"
 								: "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
@@ -498,12 +521,12 @@ export function ProductGrid() {
 
 			{/* Category pills */}
 			{categories.length > 1 && (
-				<div className="flex gap-2 flex-wrap mb-6">
+				<div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
 					{categories.map((c) => (
 						<button
 							key={c}
 							onClick={() => setActiveCategory(c)}
-							className={`font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 border transition-colors ${
+							className={`shrink-0 border px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] uppercase transition-colors ${
 								activeCategory === c
 									? "bg-accent text-foreground border-accent"
 									: "border-border/60 text-muted-foreground hover:border-foreground/40 hover:text-foreground"
@@ -517,7 +540,7 @@ export function ProductGrid() {
 
 			{/* Advanced filters panel */}
 			{showFilters && (
-				<div className="border border-border bg-card p-5 mb-6 flex flex-col sm:flex-row gap-6 items-start sm:items-end">
+				<div className="mb-6 flex flex-col items-start gap-5 border border-border bg-card p-4 sm:flex-row sm:items-end sm:gap-6 sm:p-5">
 					<div className="flex-1 min-w-[200px]">
 						<label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-2">
 							Precio máximo: ${priceRange[1]} MXN
@@ -568,14 +591,14 @@ export function ProductGrid() {
 
 			{/* Grid */}
 			{loading ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border border border-border">
+				<div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
 					{[...Array(4)].map((_, i) => (
-						<div key={i} className="bg-card animate-pulse">
-							<div className="aspect-square bg-secondary" />
-							<div className="p-4 space-y-3">
-								<div className="h-3 bg-secondary rounded w-1/3" />
-								<div className="h-5 bg-secondary rounded w-2/3" />
-								<div className="h-3 bg-secondary rounded w-full" />
+						<div key={i} className="animate-pulse">
+							<div className="aspect-[0.98] rounded-[1.35rem] border border-border/70 bg-secondary" />
+							<div className="space-y-3 px-1 pt-3">
+								<div className="h-3 w-1/3 rounded bg-secondary" />
+								<div className="h-5 w-2/3 rounded bg-secondary" />
+								<div className="h-3 w-1/2 rounded bg-secondary" />
 							</div>
 						</div>
 					))}
@@ -597,14 +620,14 @@ export function ProductGrid() {
 					</p>
 				</div>
 			) : (
-				<div className={`grid gap-px bg-border border border-border ${
+				<div className={`grid gap-4 sm:gap-6 ${
 					filtered.length === 1
 						? "grid-cols-1 max-w-sm"
 						: filtered.length === 2
-						? "grid-cols-1 sm:grid-cols-2 max-w-2xl"
+						? "grid-cols-2 max-w-2xl"
 						: filtered.length === 3
-						? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl"
-						: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+						? "grid-cols-2 lg:grid-cols-3 max-w-4xl"
+						: "grid-cols-2 lg:grid-cols-4"
 				}`}>
 					{filtered.map((product) => (
 						<ProductCard
@@ -621,11 +644,11 @@ export function ProductGrid() {
 				<p className="font-mono text-sm text-muted-foreground mb-4">
 					¿Buscas algo especial? Hacemos piezas personalizadas.
 				</p>
-				<div className="flex items-center justify-center gap-4">
+				<div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
 					<button
 						type="button"
 						onClick={() => copyToClipboard(suggestedMessage)}
-						className="inline-flex items-center gap-2 border border-foreground px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-secondary transition-colors"
+						className="inline-flex items-center justify-center gap-2 border border-foreground px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-secondary transition-colors"
 					>
 						Copiar mensaje
 					</button>
@@ -633,7 +656,7 @@ export function ProductGrid() {
 						href={instagramProfile}
 						target="_blank"
 						rel="noopener noreferrer"
-						className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-accent hover:text-foreground transition-colors"
+						className="inline-flex items-center justify-center gap-2 bg-foreground px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase text-background transition-colors hover:bg-accent hover:text-foreground"
 					>
 						Abrir Instagram
 					</a>

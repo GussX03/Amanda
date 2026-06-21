@@ -8,7 +8,8 @@ import {
   SlidersHorizontal, AlertTriangle, Check, ExternalLink,
 } from "lucide-react"
 import { ThemeToggleInverted } from "@/components/theme-toggle"
-import { listProducts, deleteProduct, deletePhoto, apiRequest, fileToBase64, optimizeImage, generateId } from "@/lib/api"
+import { HomeGalleryManager } from "@/components/admin/home-gallery-manager"
+import { listProducts, deleteProduct, deletePhoto, apiRequest, fileToBase64, optimizeImage, generateId, setProductsCache } from "@/lib/api"
 import type { Product, PhotoUpload } from "@/lib/types"
 
 interface AdminDashboardProps {
@@ -179,6 +180,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
       const res = await listProducts()
       if (res.status === "success" && res.productos) {
         setProducts(res.productos)
+        setProductsCache(res)
       } else {
         showToast(res.message || "Error al cargar productos", "err")
       }
@@ -279,9 +281,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
               alt="AMANDA"
-              width={160}
-              height={53}
-              className="h-9 sm:h-10 w-auto"
+              width={190}
+              height={63}
+              className="h-11 sm:h-12 w-auto invert"
             />
             <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-background/50 hidden sm:inline">
               Admin
@@ -522,6 +524,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             </div>
           </>
         )}
+
+        <HomeGalleryManager showToast={showToast} />
       </div>
 
       {/* Toast */}

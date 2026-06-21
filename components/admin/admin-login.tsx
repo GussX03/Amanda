@@ -40,9 +40,9 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
             alt="AMANDA"
-            width={280}
-            height={93}
-            className="h-20 w-auto opacity-90"
+            width={320}
+            height={106}
+            className="h-24 w-auto invert opacity-90"
           />
           <div className="w-12 h-px bg-background/20" />
           <p className="font-sans text-2xl text-background/60 text-center italic">
@@ -61,9 +61,9 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
             alt="AMANDA"
-            width={200}
-            height={66}
-            className="h-14 w-auto"
+            width={260}
+            height={86}
+            className="h-[4.75rem] w-auto"
           />
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
             Panel de Administración
@@ -165,7 +165,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
 
         {/* Footer */}
         <p className="absolute bottom-6 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground/40">
-          © {new Date().getFullYear()} Amanda · Joyería
+          © {new Date().getFullYear()} Amanda · Joyería & Relojería. Todos los derechos reservados.
         </p>
       </div>
     </div>

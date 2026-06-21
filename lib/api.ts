@@ -1,16 +1,107 @@
 import type { ApiResponse } from "./types"
 
+const PRODUCTS_CACHE_KEY = "amanda_products_cache_v1"
+const HERO_CACHE_KEY = "amanda_hero_cache_v1"
+const PRODUCTS_CACHE_TTL_MS = 5 * 60 * 1000
+const HERO_CACHE_TTL_MS = 5 * 60 * 1000
+
+type CachedPayload<T> = {
+  timestamp: number
+  data: T
+}
+
+function readClientCache<T>(key: string, ttlMs: number): T | null {
+  if (typeof window === "undefined") return null
+
+  try {
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return null
+
+    const parsed = JSON.parse(raw) as CachedPayload<T>
+    if (!parsed?.timestamp || !parsed?.data) return null
+    if (Date.now() - parsed.timestamp > ttlMs) return null
+
+    return parsed.data
+  } catch {
+    return null
+  }
+}
+
+function writeClientCache<T>(key: string, data: T) {
+  if (typeof window === "undefined") return
+
+  try {
+    const payload: CachedPayload<T> = {
+      timestamp: Date.now(),
+      data,
+    }
+    window.localStorage.setItem(key, JSON.stringify(payload))
+  } catch {
+    // Ignore cache write failures.
+  }
+}
+
+function clearClientCache(key: string) {
+  if (typeof window === "undefined") return
+
+  try {
+    window.localStorage.removeItem(key)
+  } catch {
+    // Ignore cache clear failures.
+  }
+}
+
 export async function apiRequest(body: Record<string, any>): Promise<ApiResponse> {
   const res = await fetch("/api/products", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    cache: "no-store",
   })
   return res.json()
 }
 
 export async function listProducts(): Promise<ApiResponse> {
-  return apiRequest({ action: "listar_productos" })
+  const res = await fetch("/api/products?action=listar_productos", {
+    method: "GET",
+    cache: "no-store",
+  })
+  return res.json()
+}
+
+export async function listHeroGallery(onlyActive = false): Promise<ApiResponse> {
+  const params = new URLSearchParams({ action: "listar_fotos_home" })
+  if (onlyActive) params.set("solo_activas", "true")
+
+  const res = await fetch(`/api/products?${params.toString()}`, {
+    method: "GET",
+    cache: "no-store",
+  })
+  return res.json()
+}
+
+export function getProductsCache(): ApiResponse | null {
+  return readClientCache<ApiResponse>(PRODUCTS_CACHE_KEY, PRODUCTS_CACHE_TTL_MS)
+}
+
+export function setProductsCache(data: ApiResponse) {
+  writeClientCache(PRODUCTS_CACHE_KEY, data)
+}
+
+export function clearProductsCache() {
+  clearClientCache(PRODUCTS_CACHE_KEY)
+}
+
+export function getHeroGalleryCache(): ApiResponse | null {
+  return readClientCache<ApiResponse>(HERO_CACHE_KEY, HERO_CACHE_TTL_MS)
+}
+
+export function setHeroGalleryCache(data: ApiResponse) {
+  writeClientCache(HERO_CACHE_KEY, data)
+}
+
+export function clearHeroGalleryCache() {
+  clearClientCache(HERO_CACHE_KEY)
 }
 
 export async function getProduct(id: string): Promise<ApiResponse> {

@@ -31,7 +31,7 @@ export function Footer() {
   return (
     <footer id="contact" className="bg-foreground text-background">
       {/* Contact CTA band */}
-      <div className="border-b border-background/10 px-6 py-16 max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+      <div className="grid gap-10 border-b border-background/10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-3 md:gap-12 max-w-6xl mx-auto">
         <div className="flex flex-col gap-3">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-background/50">
             Instagram
@@ -55,9 +55,9 @@ export function Footer() {
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-background/50">
             Mensaje sugerido
           </p>
-          <div className="flex items-center gap-3 group">
-            <span className="font-sans text-lg">"{suggestedMessage}"</span>
-            <div className="flex gap-2">
+          <div className="flex flex-col gap-3 group sm:gap-4">
+            <span className="font-sans text-lg leading-relaxed">"{suggestedMessage}"</span>
+            <div className="flex flex-col gap-2 sm:flex-row">
               <button
                 type="button"
                 onClick={() => copyToClipboard(suggestedMessage)}
@@ -96,7 +96,7 @@ export function Footer() {
       </div>
 
       {/* Order CTA */}
-      <div className="px-6 py-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="max-w-6xl mx-auto flex flex-col items-start justify-between gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center">
         <div>
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-background/50 mb-1">
             ¿Lista para ordenar?
@@ -109,7 +109,7 @@ export function Footer() {
           href={instagramProfile}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-shrink-0 inline-flex items-center gap-2 bg-background text-foreground px-8 py-3.5 font-mono text-xs tracking-[0.2em] uppercase hover:bg-accent transition-colors"
+          className="inline-flex w-full items-center justify-center gap-2 bg-background px-8 py-3.5 font-mono text-xs tracking-[0.2em] uppercase text-foreground transition-colors hover:bg-accent md:w-auto"
         >
           <InstagramIcon />
           Abrir Instagram
@@ -117,16 +117,16 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-background/10 px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 max-w-6xl mx-auto">
+      <div className="flex max-w-6xl mx-auto flex-col items-center justify-between gap-3 border-t border-background/10 px-4 py-6 text-center sm:px-6 md:flex-row md:text-left">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-vIc7d77Mxciq8SIMP9l1xgruIEHbYn.png"
           alt="AMANDA"
-          width={140}
-          height={46}
-          className="h-10 w-auto opacity-60"
+          width={180}
+          height={60}
+          className="h-[3.25rem] w-auto invert opacity-60 sm:h-12"
         />
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-background/40">
-          © {new Date().getFullYear()} Amanda. Joyería.
+          © {new Date().getFullYear()} Amanda. Joyería & Relojería.
         </p>
         <div className="flex items-center gap-4">
           <a

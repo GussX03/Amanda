@@ -4,6 +4,19 @@ export interface ProductPhoto {
   id_producto: string
 }
 
+export interface HeroGalleryPhoto {
+  id_foto: string
+  foto: string
+  orden: number
+  activo: boolean
+  position_x: number
+  position_y: number
+}
+
+export interface HeroGalleryConfig {
+  aspect_ratio: string
+}
+
 export interface Product {
   id_producto: string
   nombre: string
@@ -21,6 +34,10 @@ export interface PhotoUpload {
   id_foto: string
   fileName: string
   base64Data: string
+  orden?: number
+  activo?: boolean
+  position_x?: number
+  position_y?: number
 }
 
 export interface ApiResponse {
@@ -32,6 +49,8 @@ export interface ApiResponse {
   productos?: Product[]
   total?: number
   fotos?: ProductPhoto[]
+  hero_fotos?: HeroGalleryPhoto[]
+  hero_config?: HeroGalleryConfig
   fotos_ids_agregadas?: string[]
   id_foto?: string
 }
