@@ -291,9 +291,13 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
             <p className="mb-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
               Preview global
             </p>
-            <div className="flex gap-3 overflow-hidden">
+            <div className="flex gap-3 overflow-x-auto pb-1">
               {(photos.slice(0, 2).length > 0 ? photos.slice(0, 2) : [{ id_foto: "preview", foto: "", orden: 1, activo: true, position_x: 50, position_y: 50 }]).map((photo) => (
-                <div key={photo.id_foto} className="min-w-0 flex-1 overflow-hidden bg-secondary" style={ratioStyle}>
+                <div
+                  key={photo.id_foto}
+                  className="w-[9.5rem] flex-shrink-0 overflow-hidden bg-secondary sm:min-w-0 sm:flex-1 sm:w-auto"
+                  style={ratioStyle}
+                >
                   {photo.foto ? (
                     <div className="relative h-full w-full">
                       <Image
@@ -323,8 +327,11 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
           </p>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {newFiles.map((item) => (
-              <article key={item.id} className="border border-border bg-background">
-                <div className="relative overflow-hidden bg-secondary" style={ratioStyle}>
+              <article key={item.id} className="border border-border bg-background p-4">
+                <div
+                  className="relative mx-auto w-full max-w-[240px] overflow-hidden bg-secondary sm:max-w-[260px]"
+                  style={ratioStyle}
+                >
                   <Image
                     src={item.previewUrl}
                     alt={item.file.name}
@@ -334,7 +341,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                   />
                 </div>
 
-                <div className="space-y-4 p-4">
+                <div className="space-y-4 pt-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
                       {item.file.name}
@@ -399,8 +406,11 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {photos.map((photo) => (
-              <article key={photo.id_foto} className="border border-border bg-background">
-                <div className="relative overflow-hidden bg-secondary" style={ratioStyle}>
+              <article key={photo.id_foto} className="border border-border bg-background p-4">
+                <div
+                  className="relative mx-auto w-full max-w-[240px] overflow-hidden bg-secondary sm:max-w-[260px]"
+                  style={ratioStyle}
+                >
                   <Image
                     src={photo.foto}
                     alt=""
@@ -413,7 +423,7 @@ export function HomeGalleryManager({ showToast }: HomeGalleryManagerProps) {
                   </div>
                 </div>
 
-                <div className="space-y-4 p-4">
+                <div className="space-y-4 pt-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
                       {photo.id_foto}
