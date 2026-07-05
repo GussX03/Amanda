@@ -26,7 +26,7 @@ export function Footer() {
   const { copyToClipboard } = useCopyToast()
   const suggestedMessage = `Hola, quiero información sobre el servicio`
   const encodedMessage = encodeURIComponent(suggestedMessage)
-  const instagramProfile = "https://www.instagram.com/amanda._oficial_"
+  const instagramProfile = "https://www.instagram.com/amandaaa_mx?igsh=d2VlNGNmMjVmbm42&utm_source=qr"
 
   return (
     <footer id="contact" className="bg-foreground text-background">
@@ -46,7 +46,7 @@ export function Footer() {
               <InstagramIcon />
             </span>
             <span className="font-sans text-xl group-hover:text-background/70 transition-colors">
-              @amanda._oficial_
+              @amandaaa_mx
             </span>
           </a>
         </div>
@@ -82,14 +82,14 @@ export function Footer() {
             Correo
           </p>
           <a
-            href="mailto:amanda_oficial_@outlook.com"
+            href="mailto:AMANDA_MX@outlook.com"
             className="flex items-center gap-3 group"
           >
             <span className="text-background/70 group-hover:text-background transition-colors">
               <MailIcon />
             </span>
             <span className="font-sans text-lg break-all group-hover:text-background/70 transition-colors">
-              amanda_oficial_@outlook.com
+              AMANDA_MX@outlook.com
             </span>
           </a>
         </div>
@@ -139,7 +139,7 @@ export function Footer() {
             <InstagramIcon />
           </a>
           <a
-            href="mailto:amanda_oficial_@outlook.com"
+            href="mailto:AMANDA_MX@outlook.com"
             aria-label="Enviar correo a Amanda"
             className="text-background/50 hover:text-background transition-colors"
           >

@@ -441,7 +441,7 @@ export function ProductGrid() {
 		return result
 	}, [products, activeType, activeCategory, searchQuery, priceRange, showOnlySale, sortBy])
 
-	const instagramProfile = "https://www.instagram.com/amanda._oficial_"
+	const instagramProfile = "https://www.instagram.com/amandaaa_mx?igsh=d2VlNGNmMjVmbm42&utm_source=qr"
 	const suggestedMessage = "Hola, quiero información sobre el servicio"
 
 	return (

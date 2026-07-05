@@ -147,7 +147,7 @@ export function Hero() {
               Ver colección
             </Link>
             <a
-              href="https://www.instagram.com/amanda._oficial_"
+              href="https://www.instagram.com/amandaaa_mx?igsh=d2VlNGNmMjVmbm42&utm_source=qr"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-12 items-center justify-center border border-foreground px-6 py-3.5 text-center font-mono text-[11px] tracking-[0.22em] uppercase transition-colors hover:bg-secondary sm:px-8 sm:text-xs sm:tracking-[0.2em]"

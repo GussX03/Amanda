@@ -33,7 +33,7 @@ export function CartDrawer() {
   const suggestedMessage = `Hola, quiero información sobre el servicio\n\nPedido:\n${items
     .map((i) => `- ${i.name} x${i.quantity} = $${(i.price * i.quantity).toFixed(2)} MXN`)
     .join("\n")}\n\nTotal: $${totalPrice.toFixed(2)} MXN`
-  const instagramProfile = "https://www.instagram.com/amanda._oficial_"
+  const instagramProfile = "https://www.instagram.com/amandaaa_mx?igsh=d2VlNGNmMjVmbm42&utm_source=qr"
 
   return (
     <>
